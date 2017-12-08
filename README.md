@@ -21,7 +21,7 @@ Clyde Lets You Do Everything - keep track of your personal projects and DO them!
 
 Do you find yourself starting random personal projects and never finishing them?
 
-This is a CLI tool that allows you to easily track things that you want to work on, things you want to learn and improve on.
+This is a CLI tool that allows you to easily track things that you want to work on and things you want to learn and improve on, but maybe don't necessarily always have the time or motivation to keep it top of mind.
 
 ## Installation
 
