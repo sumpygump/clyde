@@ -1,5 +1,23 @@
 # clyde
+
 Clyde Lets You Do Everything - keep track of your personal projects and DO them!
+
+```
+
+                 ((   )  (
+               ( (   )(( (   )
+             )    ) ( )) )( (( )
+             ( (((   )  (  )  ) )
+            )) (( ) (          ((
+           (  )) )  ____   ____ )
+            ) ( ) `|<();|-|,()>|
+           ( ))(    `--'  \`--'
+           )( ( )       (- )   )
+             ))        _____  /
+               )   `     --  /
+                     `   __,
+
+```
 
 Do you find yourself starting random personal projects and never finishing them?
 
@@ -24,7 +42,8 @@ When you are wondering what you should look on you can have clyde suggest to you
 ```
 $ clyde suggest
 Today you should spend time working on this:
-----------------------------------------------------------------------------------#23: Learn more about electromagnetic radiation
+----------------------------------------------------------------------------------
+#23: Learn more about electromagnetic radiation
 ----------------------------------------------------------------------------------
 ```
 
