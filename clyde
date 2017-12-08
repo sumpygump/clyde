@@ -1,0 +1,127 @@
+#!/bin/bash
+
+# ================================================================
+# CLYDE : Clyde Lets You Do Everything
+#
+#                 ((   )  (
+#               ( (   )(( (   )
+#             )    ) ( )) )( (( )
+#             ( (((   )  (  )  ) )
+#            )) (( ) (          ((
+#           (  )) )  ____   ____ )
+#            ) ( ) `|<();|-|,()>|
+#           ( ))(    `--'  \`--'
+#           )( ( )       (- )   )
+#             ))        _____  /
+#               )   `     --  /
+#                     `   __,
+#
+# I help you keep track of the random personal projects you have
+# and suggest to you to do one of them.
+#
+# Do all the things you want to do, and don't forget to
+# continually improve yourself!
+#
+# By Jansen Price <jansen.price@gmail.com>
+# Date: 2017-12-07
+# ================================================================
+
+VERSION="clyde-1.0"
+CLYDE_PATH=~/.clyde
+CLYDE_PROJ_FILE=$CLYDE_PATH/projects.txt
+WIDTH=`tput cols`
+
+if [ ! -d "$CLYDE_PATH" ]; then
+    mkdir "$CLYDE_PATH"
+fi
+
+# Function for displaying horizontal rule
+# First argument is the char to repeat
+hr() {
+    start=1
+    end=$WIDTH
+    for ((i=$start; i<=$end; i++)); do echo -n $1; done
+}
+
+# Function for displaying usage
+displayUsage() {
+    echo "$VERSION ~ Clyde Lets You Do Everything"
+    echo 
+    echo "Usage: clyde <command> [arguments]"
+    echo "Commands:"
+    echo "  add <item> : Add a project/task"
+    echo "  list : List all current project/tasks"
+    echo "  suggest : Suggest a project/task to work on"
+    echo "  manage : Open tasks in editor to modify manually"
+}
+
+# Handle --help arg
+if [ -n "$1" -a "$1" == "--help" ]; then
+    displayUsage
+    exit 1
+fi
+
+# Handle --version arg
+if [ -n "$1" -a "$1" == "--version" ]; then
+    echo $VERSION
+    exit 1
+fi
+
+# Shift off the used args
+shift $((OPTIND-1))
+
+# COMMAND: add
+if [ -n "$1" -a "$1" == "add" ]; then
+    shift
+
+    # Get message
+    if [ -z $1 ]; then
+        echo Missing argument
+        exit 2
+    fi
+
+    # The rest of the args
+    message="$@"
+    echo "Adding project '$message'"
+    echo $message >> $CLYDE_PROJ_FILE
+    exit 0
+fi
+
+# COMMAND: list
+if [ -n "$1" -a "$1" == "list" ]; then
+    less -FX $CLYDE_PROJ_FILE
+    exit 0
+fi
+
+# COMMAND: suggest
+if [ -n "$1" -a "$1" == "suggest" ]; then
+    IFS=$'\r\n'
+    GLOBIGNORE='*'
+    command eval 'projects=($(cat $CLYDE_PROJ_FILE))'
+    total=${#projects[@]}
+
+    # $RANDOM generates a number between 0 and 32767
+    let "index = $RANDOM % $total"
+
+    echo "Today you should spend time working on this:"
+    hr -
+    let "num = $index+1"
+    echo "#$num: ${projects[$index]}"
+    hr -
+    exit 0
+fi
+
+# COMMAND: manage
+if [ -n "$1" -a "$1" == "manage" ]; then
+    # Find a suitable text editor
+    editor="$VISUAL"
+    [ -z "$editor" ] && editor="$EDITOR"
+    [ -z "$editor" ] && which editor >/dev/null && editor=editor
+    [ -z "$editor" ] && which nano   >/dev/null && editor=nano
+    [ -z "$editor" ] && which vi     >/dev/null && editor=vi
+    [ -z "$editor" ] && editor=vi
+
+    # Use the editor we found
+    $editor "$CLYDE_PROJ_FILE"
+    exit 0
+fi
