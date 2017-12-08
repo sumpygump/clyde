@@ -57,4 +57,4 @@ It's exciting to see yourself improve and return to old plans you had. Give it a
 
 ----
 
-* Ascii ART thanks to ejm (http://www.chris.com/ascii/index.php?art=people/faces)
+* Ascii art thanks to ejm (http://www.chris.com/ascii/index.php?art=people/faces)
