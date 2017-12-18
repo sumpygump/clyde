@@ -54,3 +54,7 @@ Keep on adding to your projects and it will always be there for clyde to remind 
 You can also type `clyde list` to get a list of all the things you have added. You can type `clyde manage` to open the list of projects in a text file. This is good for adding more (one project per line), or removing old ones that you don't want to worry about anymore.
 
 It's exciting to see yourself improve and return to old plans you had. Give it a try!
+
+----
+
+* Ascii art thanks to ejm (http://www.chris.com/ascii/index.php?art=people/faces)
