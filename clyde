@@ -76,7 +76,7 @@ if [ -n "$1" -a "$1" == "add" ]; then
     shift
 
     # Get message
-    if [ -z $1 ]; then
+    if [ -z "$1" ]; then
         echo Missing argument
         exit 2
     fi
