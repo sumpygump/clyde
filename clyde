@@ -26,7 +26,7 @@
 # Date: 2017-12-07
 # ================================================================
 
-VERSION="clyde-1.0"
+VERSION="clyde-1.1"
 CLYDE_PATH=~/.clyde
 CLYDE_PROJ_FILE=$CLYDE_PATH/projects.txt
 WIDTH=`tput cols`
@@ -34,6 +34,35 @@ WIDTH=`tput cols`
 if [ ! -d "$CLYDE_PATH" ]; then
     mkdir "$CLYDE_PATH"
 fi
+
+green() {
+    if [ -t 0 ]; then
+        printf "\E[32m" 
+    fi
+}
+op() {
+    if [ -t 0 ]; then
+        printf "\E[39;49m"
+    fi
+}
+
+showclyde() {
+    green
+    echo '                 ((   )  ('
+    echo '               ( (   )(( (   )'
+    echo '             )    ) ( )) )( (( )'
+    echo '             ( (((   )  (  )  ) )'
+    echo '            )) (( ) (          (('
+    echo '           (  )) )  ____   ____ )'
+    echo '            ) ( ) `|<();|-|,()>|'
+    echo '           ( ))(    `--'"'"'  \`--'"'"
+    echo '           )( ( )       (- )   )'
+    echo '             ))        _____  /'
+    echo '               )   `     --  /'
+    echo '                     `   __,'
+    echo
+    op
+}
 
 # Function for displaying horizontal rule
 # First argument is the char to repeat
@@ -71,8 +100,13 @@ fi
 # Shift off the used args
 shift $((OPTIND-1))
 
+COMMAND="suggest"
+if [ -n "$1" ]; then
+    COMMAND="$1"
+fi
+
 # COMMAND: add
-if [ -n "$1" -a "$1" == "add" ]; then
+if [ $COMMAND == "add" ]; then
     shift
 
     # Get message
@@ -89,13 +123,14 @@ if [ -n "$1" -a "$1" == "add" ]; then
 fi
 
 # COMMAND: list
-if [ -n "$1" -a "$1" == "list" ]; then
+if [ $COMMAND == "list" ]; then
     less -FX $CLYDE_PROJ_FILE
     exit 0
 fi
 
 # COMMAND: suggest
-if [ -n "$1" -a "$1" == "suggest" ]; then
+if [ $COMMAND == "suggest" ]; then
+    showclyde
     IFS=$'\r\n'
     GLOBIGNORE='*'
     command eval 'projects=($(cat $CLYDE_PROJ_FILE))'
@@ -113,7 +148,7 @@ if [ -n "$1" -a "$1" == "suggest" ]; then
 fi
 
 # COMMAND: manage
-if [ -n "$1" -a "$1" == "manage" ]; then
+if [ $COMMAND == "manage" ]; then
     # Find a suitable text editor
     editor="$VISUAL"
     [ -z "$editor" ] && editor="$EDITOR"
