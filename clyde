@@ -29,6 +29,7 @@
 VERSION="clyde-1.1"
 CLYDE_PATH=~/.clyde
 CLYDE_PROJ_FILE=$CLYDE_PATH/projects.txt
+SHOW_CLYDE=true
 WIDTH=`tput cols`
 
 if [ ! -d "$CLYDE_PATH" ]; then
@@ -37,7 +38,7 @@ fi
 
 green() {
     if [ -t 0 ]; then
-        printf "\E[32m" 
+        printf "\E[32m"
     fi
 }
 op() {
@@ -76,8 +77,12 @@ hr() {
 # Function for displaying usage
 displayUsage() {
     echo "$VERSION ~ Clyde Lets You Do Everything"
-    echo 
-    echo "Usage: clyde <command> [arguments]"
+    echo
+    echo "Usage: clyde [-n] <command> [arguments]"
+    echo
+    echo "Options:"
+    echo "  -n : Will hide the clyde mascot when suggesting a project/task"
+    echo
     echo "Commands:"
     echo "  add <item> : Add a project/task"
     echo "  list : List all current project/tasks"
@@ -95,6 +100,12 @@ fi
 if [ -n "$1" -a "$1" == "--version" ]; then
     echo $VERSION
     exit 1
+fi
+
+# Handle -n flag
+if [ -n "$1" -a "$1" == "-n" ]; then
+    SHOW_CLYDE=false
+    shift
 fi
 
 # Shift off the used args
@@ -130,7 +141,9 @@ fi
 
 # COMMAND: suggest
 if [ $COMMAND == "suggest" ]; then
-    showclyde
+    if [ $SHOW_CLYDE == true ]; then
+        showclyde
+    fi
     IFS=$'\r\n'
     GLOBIGNORE='*'
     command eval 'projects=($(cat $CLYDE_PROJ_FILE))'
@@ -139,7 +152,7 @@ if [ $COMMAND == "suggest" ]; then
     # $RANDOM generates a number between 0 and 32767
     let "index = $RANDOM % $total"
 
-    echo "Today you should spend time working on this:"
+    echo "CLYDE: Today you should spend time working on this:"
     hr -
     let "num = $index+1"
     echo "#$num: ${projects[$index]}"
