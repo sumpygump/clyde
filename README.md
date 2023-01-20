@@ -1,5 +1,7 @@
 # clyde
 
+[![basher install](https://www.basher.it/assets/logo/basher_install.svg)](https://www.basher.it/package/)
+
 Clyde Lets You Do Everything - keep track of your personal projects and DO them!
 
 ```

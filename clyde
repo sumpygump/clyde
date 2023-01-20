@@ -26,15 +26,11 @@
 # Date: 2017-12-07
 # ================================================================
 
-VERSION="clyde-1.1"
+VERSION="clyde-1.2"
 CLYDE_PATH=~/.clyde
 CLYDE_PROJ_FILE=$CLYDE_PATH/projects.txt
 SHOW_CLYDE=true
 WIDTH=`tput cols`
-
-if [ ! -d "$CLYDE_PATH" ]; then
-    mkdir "$CLYDE_PATH"
-fi
 
 green() {
     if [ -t 0 ]; then
@@ -47,7 +43,8 @@ op() {
     fi
 }
 
-showclyde() {
+show_clyde() {
+    # The clyde mascot
     green
     echo '                 ((   )  ('
     echo '               ( (   )(( (   )'
@@ -75,7 +72,7 @@ hr() {
 }
 
 # Function for displaying usage
-displayUsage() {
+display_usage() {
     echo "$VERSION ~ Clyde Lets You Do Everything"
     echo
     echo "Usage: clyde [-n] <command> [arguments]"
@@ -90,14 +87,17 @@ displayUsage() {
     echo "  manage : Open tasks in editor to modify manually"
 }
 
+# First handle arguments and initialization
+# -----------------------------------------
+
 # Handle --help arg
-if [ -n "$1" -a "$1" == "--help" ]; then
-    displayUsage
+if [ -n "$1" -a "$1" == "--help" ] || [ "$1" == "-h" ] || [ "$1" == "help" ]; then
+    display_usage
     exit 1
 fi
 
 # Handle --version arg
-if [ -n "$1" -a "$1" == "--version" ]; then
+if [ -n "$1" -a "$1" == "--version" ] || [ "$1" == "-v" ]; then
     echo $VERSION
     exit 1
 fi
@@ -116,13 +116,23 @@ if [ -n "$1" ]; then
     COMMAND="$1"
 fi
 
+# Ensure path and project file
+if [ ! -d "$CLYDE_PATH" ]; then
+    mkdir "$CLYDE_PATH"
+fi
+touch $CLYDE_PROJ_FILE
+
+# Main program logic
+# ------------------
+
 # COMMAND: add
 if [ $COMMAND == "add" ]; then
     shift
 
     # Get message
     if [ -z "$1" ]; then
-        echo Missing argument
+        echo "Missing argument"
+        echo "Usage: \`clyde add <project or task>\`"
         exit 2
     fi
 
@@ -142,12 +152,18 @@ fi
 # COMMAND: suggest
 if [ $COMMAND == "suggest" ]; then
     if [ $SHOW_CLYDE == true ]; then
-        showclyde
+        show_clyde
     fi
     IFS=$'\r\n'
     GLOBIGNORE='*'
     command eval 'projects=($(cat $CLYDE_PROJ_FILE))'
     total=${#projects[@]}
+
+    if [ $total == 0 ]; then
+        echo "No projects/tasks found yet!"
+        echo "Use \`clyde add\` to add something"
+        exit 1
+    fi
 
     # $RANDOM generates a number between 0 and 32767
     let "index = $RANDOM % $total"
